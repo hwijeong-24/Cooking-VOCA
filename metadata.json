@@ -1,0 +1,6 @@
+{
+  "name": "Cooking Voca",
+  "description": "A 3-minute, spelling-focused restaurant English vocabulary game for 1st-year middle school students.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
