@@ -120,7 +120,7 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
       id="dish-completion-modal"
     >
       <div
-        className={`relative w-full max-w-xl rounded-3xl border-3 shadow-2xl overflow-hidden my-auto max-h-[95vh] flex flex-col ${
+        className={`relative w-full max-w-xl lg:max-w-2xl rounded-3xl border-3 shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col ${
           isFailed
             ? 'bg-gradient-to-b from-stone-950 via-rose-950 to-stone-950 border-rose-600 shadow-rose-950/80'
             : 'bg-gradient-to-b from-stone-900 via-amber-950/95 to-stone-900 border-amber-500/60 shadow-amber-950/60'
@@ -430,7 +430,7 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
                     요리 미완성으로 코인 미지급! (0 코인)
                   </span>
                   <p className="text-xs text-stone-300">
-                    3개 재료를 모두 실패하여 손님이 대금을 지불하지 않고 분노했습니다.
+                    3개 재료의 철자가 모두 어긋나 이번 요리는 아쉽지만 코인이 지급되지 않았습니다.
                   </p>
                 </div>
               </div>

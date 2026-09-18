@@ -4,7 +4,7 @@ import { generateQuestions, findVocabWordsForHistory } from './utils/gameHelper'
 import { StartScreen } from './components/StartScreen';
 import { GameScreen } from './components/GameScreen';
 import { ResultScreen } from './components/ResultScreen';
-import { LandscapeHelper } from './components/LandscapeHelper';
+import { OrientationHelper } from './components/OrientationHelper';
 
 export default function App() {
   const [screen, setScreen] = useState<'start' | 'game' | 'result'>('start');
@@ -117,8 +117,8 @@ export default function App() {
         />
       )}
 
-      {/* Landscape helper notification for mobile portrait users */}
-      <LandscapeHelper />
+      {/* Orientation helper notification for smartphones (portrait) & tablets/laptops (landscape) */}
+      <OrientationHelper />
     </div>
   );
 }

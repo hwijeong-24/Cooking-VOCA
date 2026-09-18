@@ -118,68 +118,109 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
         </div>
       </header>
 
-      {/* Center Main Content */}
-      <main className="w-full max-w-4xl mx-auto my-2 sm:my-3 z-10 flex flex-col gap-4">
-        {/* Score & Chef Badge Card */}
-        <div className="bg-white/90 backdrop-blur-md rounded-3xl p-4 sm:p-6 border-3 border-amber-300 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          {/* Chef Illustration with expression */}
-          <div className="flex flex-col items-center shrink-0">
-            <ChefAvatar
-              size="lg"
-              expression={isPerfect ? 'celebrate' : correctCount >= 10 ? 'confident' : 'thinking'}
-            />
-            <span className="mt-1 text-xs font-black text-amber-900 bg-amber-100 px-3 py-0.5 rounded-full border border-amber-300">
-              {rank.badge}
-            </span>
-          </div>
-
-          {/* Stats Breakdown */}
-          <div className="flex-1 text-center sm:text-left space-y-1.5">
-            <div className="flex items-center justify-center sm:justify-start gap-2">
-              <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-amber-800">
-                CHEF EVALUATION
+      {/* Center Main Content: Portrait on Smartphones, Landscape on Tablets & Laptops */}
+      <main className="w-full max-w-6xl mx-auto my-2 sm:my-3 z-10 flex flex-col lg:grid lg:grid-cols-12 lg:gap-6 lg:items-start">
+        {/* Left Column (Landscape) / Top Block (Portrait): Score, Chef Badge & Primary Actions */}
+        <div className="w-full lg:col-span-5 flex flex-col gap-4">
+          {/* Score & Chef Badge Card */}
+          <div className="bg-white/90 backdrop-blur-md rounded-3xl p-4 sm:p-5 border-3 border-amber-300 shadow-xl flex flex-col sm:flex-row lg:flex-col items-center justify-between gap-4 text-center sm:text-left lg:text-center">
+            {/* Chef Illustration with expression */}
+            <div className="flex flex-col items-center shrink-0">
+              <ChefAvatar
+                size="lg"
+                expression={isPerfect ? 'celebrate' : correctCount >= 10 ? 'confident' : 'thinking'}
+              />
+              <span className="mt-1 text-xs font-black text-amber-900 bg-amber-100 px-3 py-0.5 rounded-full border border-amber-300">
+                {rank.badge}
               </span>
-              {isPerfect && (
-                <span className="bg-emerald-500 text-white text-[11px] font-black px-2 py-0.5 rounded-md flex items-center gap-1 shadow-xs">
-                  <Sparkles className="w-3 h-3" />
-                  PERFECT ALL CLEAR
-                </span>
-              )}
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
-              {rank.title}
-            </h2>
+            {/* Stats Breakdown */}
+            <div className="flex-1 text-center sm:text-left lg:text-center space-y-1.5">
+              <div className="flex items-center justify-center sm:justify-start lg:justify-center gap-2">
+                <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-amber-800">
+                  CHEF EVALUATION
+                </span>
+                {isPerfect && (
+                  <span className="bg-emerald-500 text-white text-[11px] font-black px-2 py-0.5 rounded-md flex items-center gap-1 shadow-xs">
+                    <Sparkles className="w-3 h-3" />
+                    PERFECT ALL CLEAR
+                  </span>
+                )}
+              </div>
 
-            <p className="text-xs sm:text-sm text-stone-600 font-medium">
-              총 5명의 손님 주문(15개 재료) 중 <strong className="text-emerald-700 text-base">{correctCount}개</strong>를 성공적으로 서빙했습니다.
-            </p>
+              <h2 className="text-2xl sm:text-3xl font-black text-stone-900 tracking-tight">
+                {rank.title}
+              </h2>
 
-            <div className="pt-2 flex flex-wrap items-center justify-center sm:justify-start gap-3">
-              {/* Accumulated Coins */}
-              <div
-                className="flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-stone-950 font-black px-4 py-2 rounded-2xl border-2 border-yellow-200 shadow-md"
-                id="result-coins-box"
-              >
-                <Coins className="w-6 h-6 text-amber-950 fill-amber-300" />
-                <div className="leading-tight">
-                  <div className="text-[10px] font-bold text-amber-900 uppercase">누적 획득 코인</div>
-                  <div className="text-xl sm:text-2xl font-black">
-                    {totalCoins} <span className="text-sm font-bold text-amber-900">/ {maxCoins} G</span>
+              <p className="text-xs sm:text-sm text-stone-600 font-medium">
+                총 5명의 손님 주문(15개 재료) 중 <strong className="text-emerald-700 text-base">{correctCount}개</strong>를 성공적으로 서빙했습니다.
+              </p>
+
+              <div className="pt-2 flex flex-wrap items-center justify-center sm:justify-start lg:justify-center gap-2.5">
+                {/* Accumulated Coins */}
+                <div
+                  className="flex items-center gap-2 bg-gradient-to-r from-amber-500 to-yellow-400 text-stone-950 font-black px-3.5 py-1.5 rounded-2xl border-2 border-yellow-200 shadow-md"
+                  id="result-coins-box"
+                >
+                  <Coins className="w-5 h-5 text-amber-950 fill-amber-300" />
+                  <div className="leading-tight">
+                    <div className="text-[9px] font-bold text-amber-900 uppercase">누적 획득 코인</div>
+                    <div className="text-lg sm:text-xl font-black">
+                      {totalCoins} <span className="text-xs font-bold text-amber-900">/ {maxCoins} G</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Accuracy rate */}
+                <div className="bg-amber-50 border border-amber-200 px-3.5 py-1.5 rounded-2xl text-center leading-tight">
+                  <div className="text-[9px] font-bold text-amber-800 uppercase">정답률</div>
+                  <div className="text-lg sm:text-xl font-black text-amber-950">
+                    {Math.round((correctCount / (history.length || 15)) * 100)}%
                   </div>
                 </div>
               </div>
-
-              {/* Accuracy rate */}
-              <div className="bg-amber-50 border border-amber-200 px-4 py-2 rounded-2xl text-center leading-tight">
-                <div className="text-[10px] font-bold text-amber-800 uppercase">정답률 (Accuracy)</div>
-                <div className="text-xl sm:text-2xl font-black text-amber-950">
-                  {Math.round((correctCount / (history.length || 15)) * 100)}%
-                </div>
-              </div>
             </div>
           </div>
+
+          {/* Action Buttons: Visible on Tablet/Laptop Landscape (Left side) */}
+          <div className="hidden lg:flex flex-col gap-2.5">
+            <button
+              type="button"
+              onClick={onRetry}
+              className="w-full py-3 px-4 bg-gradient-to-b from-amber-500 via-amber-600 to-amber-700 hover:from-amber-400 hover:to-amber-600 text-amber-950 font-black text-base rounded-2xl border-3 border-amber-300 shadow-[0_4px_0_#78350f] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer"
+              id="retry-game-btn-lg"
+            >
+              <RotateCcw className="w-5 h-5 text-amber-950" />
+              <span>새 게임 도전 (Retry)</span>
+            </button>
+
+            {incorrectList.length > 0 && onRetryIncorrectOnly && (
+              <button
+                type="button"
+                onClick={() => onRetryIncorrectOnly(incorrectList)}
+                className="w-full py-3 px-4 bg-gradient-to-b from-rose-500 to-rose-600 hover:from-rose-400 hover:to-rose-500 text-white font-black text-base rounded-2xl border-2 border-rose-300 shadow-[0_4px_0_#881337] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer"
+                id="retry-incorrect-btn-lg"
+              >
+                <AlertTriangle className="w-5 h-5 text-rose-100" />
+                <span>오답 {incorrectList.length}개만 다시 풀기</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={onBackToHome}
+              className="w-full py-2.5 px-4 bg-white hover:bg-amber-50 text-stone-800 font-bold text-base rounded-2xl border-2 border-stone-300 shadow-sm active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              id="back-to-home-btn-lg"
+            >
+              <Home className="w-5 h-5 text-stone-600" />
+              <span>홈으로 이동 (Back to Home)</span>
+            </button>
+          </div>
         </div>
+
+        {/* Right Column (Landscape) / Bottom Block (Portrait): Incorrect Words Review Clinic & Mobile Action Buttons */}
+        <div className="w-full lg:col-span-7 flex flex-col gap-4">
 
         {/* Incorrect Words Review Section (PRD: List of incorrect words, retry option) */}
         <div className="bg-white/85 backdrop-blur-md rounded-3xl p-4 sm:p-5 border-2 border-amber-300 shadow-lg">
@@ -278,41 +319,42 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
               })}
             </div>
           )}
-        </div>
+          </div>
 
-        {/* Action Buttons: [Retry] and [Back to Home] */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-1">
-          <button
-            type="button"
-            onClick={onRetry}
-            className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-b from-amber-500 via-amber-600 to-amber-700 hover:from-amber-400 hover:to-amber-600 text-amber-950 font-black text-lg sm:text-xl rounded-2xl border-3 border-amber-300 shadow-[0_4px_0_#78350f] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer"
-            id="retry-game-btn"
-          >
-            <RotateCcw className="w-5 h-5 text-amber-950" />
-            <span>새 게임 도전 (Retry)</span>
-          </button>
-
-          {incorrectList.length > 0 && onRetryIncorrectOnly && (
+          {/* Action Buttons: Visible only on Smartphone portrait (bottom) */}
+          <div className="flex lg:hidden flex-col sm:flex-row items-center justify-center gap-3 pt-1">
             <button
               type="button"
-              onClick={() => onRetryIncorrectOnly(incorrectList)}
-              className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-b from-rose-500 to-rose-600 hover:from-rose-400 hover:to-rose-500 text-white font-black text-base sm:text-lg rounded-2xl border-2 border-rose-300 shadow-[0_4px_0_#881337] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer"
-              id="retry-incorrect-btn"
+              onClick={onRetry}
+              className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-b from-amber-500 via-amber-600 to-amber-700 hover:from-amber-400 hover:to-amber-600 text-amber-950 font-black text-lg sm:text-xl rounded-2xl border-3 border-amber-300 shadow-[0_4px_0_#78350f] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer"
+              id="retry-game-btn"
             >
-              <AlertTriangle className="w-5 h-5 text-rose-100" />
-              <span>오답 {incorrectList.length}개만 다시 풀기</span>
+              <RotateCcw className="w-5 h-5 text-amber-950" />
+              <span>새 게임 도전 (Retry)</span>
             </button>
-          )}
 
-          <button
-            type="button"
-            onClick={onBackToHome}
-            className="w-full sm:w-auto px-6 py-3.5 bg-white hover:bg-amber-50 text-stone-800 font-bold text-base sm:text-lg rounded-2xl border-2 border-stone-300 shadow-sm active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
-            id="back-to-home-btn"
-          >
-            <Home className="w-5 h-5 text-stone-600" />
-            <span>홈으로 이동 (Back to Home)</span>
-          </button>
+            {incorrectList.length > 0 && onRetryIncorrectOnly && (
+              <button
+                type="button"
+                onClick={() => onRetryIncorrectOnly(incorrectList)}
+                className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-b from-rose-500 to-rose-600 hover:from-rose-400 hover:to-rose-500 text-white font-black text-base sm:text-lg rounded-2xl border-2 border-rose-300 shadow-[0_4px_0_#881337] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2 cursor-pointer"
+                id="retry-incorrect-btn"
+              >
+                <AlertTriangle className="w-5 h-5 text-rose-100" />
+                <span>오답 {incorrectList.length}개만 다시 풀기</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={onBackToHome}
+              className="w-full sm:w-auto px-6 py-3.5 bg-white hover:bg-amber-50 text-stone-800 font-bold text-base sm:text-lg rounded-2xl border-2 border-stone-300 shadow-sm active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              id="back-to-home-btn"
+            >
+              <Home className="w-5 h-5 text-stone-600" />
+              <span>홈으로 이동 (Back to Home)</span>
+            </button>
+          </div>
         </div>
       </main>
 

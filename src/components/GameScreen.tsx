@@ -482,9 +482,11 @@ export const GameScreen: React.FC<GameScreenProps> = ({
         </div>
       </header>
 
-      {/* 2. Middle Central Zone: Customer + Speech Bubble (3 Ingredients Dish Workflow) */}
-      <main className="w-full flex-1 flex flex-col justify-center items-center my-1 sm:my-2 px-1 max-w-5xl mx-auto">
-        <div className="w-full flex flex-row items-center justify-center gap-3 sm:gap-6">
+      {/* 2. Main Play Area: Portrait Mode on Smartphones, Landscape Mode on Tablets & Laptops */}
+      <main className="w-full flex-1 flex flex-col lg:grid lg:grid-cols-12 lg:gap-5 xl:gap-6 justify-center items-center lg:items-stretch my-1 sm:my-2 px-1 max-w-6xl mx-auto z-10">
+        {/* Customer Dining Station (Top in Portrait / Left in Landscape) */}
+        <div className="w-full lg:col-span-5 xl:col-span-5 flex flex-col justify-center">
+          <div className="w-full flex flex-row items-center justify-center gap-2.5 sm:gap-4 lg:gap-4">
           {/* Customer Avatar & Nametag */}
           <div className="flex flex-col items-center shrink-0">
             <CustomerAvatar
@@ -741,112 +743,115 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             </div>
           </div>
         </div>
-      </main>
+        </div>
 
-      {/* 3. Bottom Zone: 5 [Ingredient Card] Buttons */}
-      <footer className="w-full max-w-5xl mx-auto shrink-0 pb-1 z-10">
-        <div className="flex items-center justify-between px-1 mb-1.5 text-xs text-amber-950 font-bold">
-          <span className="flex items-center gap-1">
-            <span>🥗 신선한 영단어 재료 선택 (Ingredient Cards)</span>
-            <span className="text-[10px] bg-amber-800/10 text-amber-900 px-2 py-0.5 rounded-full">
-              즉시 서빙
+        {/* Kitchen Ingredient Preparation Station (Bottom in Portrait / Right in Landscape) */}
+        <div className="w-full lg:col-span-7 xl:col-span-7 flex flex-col justify-center mt-2 lg:mt-0">
+          <div className="flex items-center justify-between px-1 mb-1.5 text-xs text-amber-950 font-bold">
+            <span className="flex items-center gap-1">
+              <span>🥗 신선한 영단어 재료 선택</span>
+              <span className="text-[10px] bg-amber-800/10 text-amber-900 px-2 py-0.5 rounded-full border border-amber-800/20">
+                즉시 서빙
+              </span>
             </span>
-          </span>
-          <span className="text-[11px] text-amber-900/80">
-            {isAnswered ? '서빙 결과 확인 중...' : '원하는 영단어를 터치하세요!'}
-          </span>
-        </div>
+            <span className="text-[11px] text-amber-900/80">
+              {isAnswered ? '서빙 결과 확인 중...' : '원하는 영단어를 터치하세요!'}
+            </span>
+          </div>
 
-        {/* 5 Cards Layout (Finger-friendly in landscape: 5 columns on desktop/tablet, responsive flex/grid) */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3" id="ingredient-cards-container">
-          {question.options.map((opt, idx) => {
-            const isThisSelected = selectedWord === opt.word;
-            const isThisCorrect = opt.word.toLowerCase() === question.correctWord.toLowerCase();
-            const isThisTrap = opt.isTrap;
+          {/* 5 Cards Layout: Responsive 2-column + 1-full-width in mobile portrait; spacious grid in tablet/laptop landscape */}
+          <div className="grid grid-cols-2 gap-2 sm:gap-2.5 lg:gap-3" id="ingredient-cards-container">
+            {question.options.map((opt, idx) => {
+              const isThisSelected = selectedWord === opt.word;
+              const isThisCorrect = opt.word.toLowerCase() === question.correctWord.toLowerCase();
+              const isThisTrap = opt.isTrap;
 
-            // Style states
-            let cardBg =
-              'bg-gradient-to-b from-white to-amber-50/90 text-stone-800 border-amber-300 hover:border-amber-400 hover:shadow-md';
-            let statusBadge = null;
+              // Style states
+              let cardBg =
+                'bg-gradient-to-b from-white to-amber-50/90 text-stone-800 border-amber-300 hover:border-amber-400 hover:shadow-md hover:-translate-y-0.5';
+              let statusBadge = null;
 
-            if (isAnswered) {
-              if (isThisCorrect) {
-                // Correct answer always glows green
-                cardBg =
-                  'bg-gradient-to-b from-emerald-500 to-emerald-700 text-white border-emerald-300 shadow-lg ring-2 ring-emerald-400 scale-102';
-                statusBadge = (
-                  <span className="absolute -top-2 -right-1 bg-emerald-400 text-emerald-950 text-[10px] font-black px-1.5 py-0.5 rounded-md shadow-xs">
-                    정답!
-                  </span>
-                );
-              } else if (isThisSelected && !isThisCorrect) {
-                // Selected wrong card turns red
-                cardBg =
-                  'bg-gradient-to-b from-rose-500 to-rose-700 text-white border-rose-300 shadow-lg ring-2 ring-rose-400';
-                statusBadge = (
-                  <span className="absolute -top-2 -right-1 bg-rose-400 text-rose-950 text-[10px] font-black px-1.5 py-0.5 rounded-md shadow-xs flex items-center gap-0.5">
-                    {isThisTrap && <AlertTriangle className="w-2.5 h-2.5" />}
-                    {isThisTrap ? '함정!' : '오답'}
-                  </span>
-                );
-              } else {
-                // Other unselected options dim
-                cardBg = 'bg-stone-100/60 text-stone-400 border-stone-300 opacity-60';
+              if (isAnswered) {
+                if (isThisCorrect) {
+                  // Correct answer always glows green
+                  cardBg =
+                    'bg-gradient-to-b from-emerald-500 to-emerald-700 text-white border-emerald-300 shadow-lg ring-2 ring-emerald-400 scale-101';
+                  statusBadge = (
+                    <span className="absolute -top-2 -right-1 bg-emerald-400 text-emerald-950 text-[10px] font-black px-1.5 py-0.5 rounded-md shadow-xs">
+                      정답!
+                    </span>
+                  );
+                } else if (isThisSelected && !isThisCorrect) {
+                  // Selected wrong card turns red
+                  cardBg =
+                    'bg-gradient-to-b from-rose-500 to-rose-700 text-white border-rose-300 shadow-lg ring-2 ring-rose-400';
+                  statusBadge = (
+                    <span className="absolute -top-2 -right-1 bg-rose-400 text-rose-950 text-[10px] font-black px-1.5 py-0.5 rounded-md shadow-xs flex items-center gap-0.5">
+                      {isThisTrap && <AlertTriangle className="w-2.5 h-2.5" />}
+                      {isThisTrap ? '함정!' : '오답'}
+                    </span>
+                  );
+                } else {
+                  // Other unselected options dim
+                  cardBg = 'bg-stone-100/60 text-stone-400 border-stone-300 opacity-60';
+                }
               }
-            }
 
-            return (
-              <button
-                key={`${opt.word}-${idx}`}
-                type="button"
-                disabled={isAnswered}
-                onClick={() => handleSelectOption(opt.word)}
-                className={`relative flex flex-col items-center justify-between p-2.5 sm:p-3.5 rounded-2xl border-2 sm:border-3 transition-all duration-200 cursor-pointer select-none active:scale-98 min-h-[72px] sm:min-h-[96px] ${cardBg}`}
-                id={`ingredient-card-${idx}`}
-                style={{
-                  fontFamily: "'Nunito', 'Noto Sans KR', sans-serif",
-                }}
-              >
-                {statusBadge}
+              return (
+                <button
+                  key={`${opt.word}-${idx}`}
+                  type="button"
+                  disabled={isAnswered}
+                  onClick={() => handleSelectOption(opt.word)}
+                  className={`relative flex flex-col items-center justify-between p-2 sm:p-3 rounded-2xl border-2 sm:border-3 transition-all duration-200 cursor-pointer select-none active:scale-98 min-h-[72px] sm:min-h-[84px] lg:min-h-[88px] ${
+                    idx === 4 ? 'col-span-2' : ''
+                  } ${cardBg}`}
+                  id={`ingredient-card-${idx}`}
+                  style={{
+                    fontFamily: "'Nunito', 'Noto Sans KR', sans-serif",
+                  }}
+                >
+                  {statusBadge}
 
-                {/* Top of Card: Emoji + Ingredient Label */}
-                <div className="w-full flex items-center justify-between gap-1 text-xs">
-                  <span className="text-xl sm:text-2xl drop-shadow-xs">{opt.ingredientEmoji}</span>
-                  <span
-                    className={`text-[10px] sm:text-[11px] font-semibold truncate ${
-                      isAnswered && (isThisCorrect || isThisSelected) ? 'text-white/90' : 'text-stone-500'
-                    }`}
-                  >
-                    {opt.ingredientName}
-                  </span>
-                </div>
+                  {/* Top of Card: Emoji + Ingredient Label */}
+                  <div className="w-full flex items-center justify-between gap-1 text-xs">
+                    <span className="text-xl sm:text-2xl drop-shadow-xs">{opt.ingredientEmoji}</span>
+                    <span
+                      className={`text-[10px] sm:text-[11px] font-semibold truncate ${
+                        isAnswered && (isThisCorrect || isThisSelected) ? 'text-white/90' : 'text-stone-500'
+                      }`}
+                    >
+                      {opt.ingredientName}
+                    </span>
+                  </div>
 
-                {/* Center: English Word - Large, clear typography for 1st-year students */}
-                <div className="my-1 text-center w-full">
-                  <span
-                    className={`block text-base sm:text-xl md:text-2xl font-black tracking-tight leading-tight ${
-                      isAnswered && (isThisCorrect || isThisSelected) ? 'text-white' : 'text-amber-950'
-                    }`}
-                  >
-                    {opt.word}
-                  </span>
-                </div>
+                  {/* Center: English Word - Large, clear typography for 1st-year students */}
+                  <div className="my-0.5 text-center w-full">
+                    <span
+                      className={`block text-base sm:text-xl md:text-2xl font-black tracking-tight leading-tight ${
+                        isAnswered && (isThisCorrect || isThisSelected) ? 'text-white' : 'text-amber-950'
+                      }`}
+                    >
+                      {opt.word}
+                    </span>
+                  </div>
 
-                {/* Bottom hint label */}
-                <div className="w-full flex justify-end">
-                  <span
-                    className={`text-[9px] font-bold uppercase tracking-wider ${
-                      isAnswered && (isThisCorrect || isThisSelected) ? 'text-white/80' : 'text-stone-400'
-                    }`}
-                  >
-                    TOUCH
-                  </span>
-                </div>
-              </button>
-            );
-          })}
+                  {/* Bottom hint label */}
+                  <div className="w-full flex justify-end">
+                    <span
+                      className={`text-[9px] font-bold uppercase tracking-wider ${
+                        isAnswered && (isThisCorrect || isThisSelected) ? 'text-white/80' : 'text-stone-400'
+                      }`}
+                    >
+                      TOUCH
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </footer>
+      </main>
 
       {/* 4. Dish Completion Modal (Finished Dish Image, Reward, and Manual Next Customer button) */}
       {dishModalData && (
