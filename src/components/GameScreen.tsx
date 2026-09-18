@@ -373,8 +373,13 @@ export const GameScreen: React.FC<GameScreenProps> = ({
     onAnswerSubmitted(pendingSubmission);
   };
 
-  const isUserCorrect = isAnswered && selectedWord === question.correctWord;
-  const isUserTrap = isAnswered && selectedWord === question.trapWord;
+  const selectedOption = selectedWord
+    ? question.options.find((opt) => opt.word.toLowerCase() === selectedWord.toLowerCase())
+    : null;
+  const isUserCorrect = isAnswered && Boolean(selectedWord && selectedWord.toLowerCase() === question.correctWord.toLowerCase());
+  const isUserTrap = isAnswered && Boolean(
+    selectedOption ? selectedOption.isTrap : selectedWord?.toLowerCase() === question.trapWord.toLowerCase()
+  );
 
   // Check if all 3 ingredients are incorrect for this customer
   const prevIng1 = history.find(
@@ -659,12 +664,30 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                         {/* Specific Distinction between Chosen Wrong Word and Correct Word - Large English Typography */}
                         <div className="mt-2.5 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                           <div className="bg-rose-900/40 border border-rose-500/40 rounded-xl p-2 sm:p-2.5 flex items-center justify-between gap-2">
-                            <span className="text-rose-300 font-bold text-xs shrink-0">
-                              선택한 오답:
-                            </span>
-                            <span className="font-mono font-black text-sm sm:text-base text-rose-200 bg-rose-950 px-2.5 py-1 rounded-lg line-through tracking-wide">
-                              {selectedWord}
-                            </span>
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <span className="text-rose-300 font-bold text-xs">
+                                선택한 오답:
+                              </span>
+                              {isUserTrap ? (
+                                <span className="text-[10px] font-black text-amber-300 bg-amber-950/90 px-1.5 py-0.5 rounded border border-amber-500/50">
+                                  스펠링 함정
+                                </span>
+                              ) : (
+                                <span className="text-[10px] font-black text-rose-200 bg-rose-950/90 px-1.5 py-0.5 rounded border border-rose-500/50">
+                                  일반 오답
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-1 min-w-0">
+                              {selectedOption && (
+                                <span className="text-base shrink-0" title={selectedOption.ingredientName}>
+                                  {selectedOption.ingredientEmoji}
+                                </span>
+                              )}
+                              <span className="font-mono font-black text-sm sm:text-base text-rose-200 bg-rose-950 px-2.5 py-1 rounded-lg line-through tracking-wide truncate">
+                                {selectedWord}
+                              </span>
+                            </div>
                           </div>
 
                           <div className="bg-emerald-950/70 border-2 border-emerald-500/60 rounded-xl p-2 sm:p-2.5 flex items-center justify-between gap-2 shadow-sm">

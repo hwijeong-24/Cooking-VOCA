@@ -70,7 +70,14 @@ export function generateQuestions(
 
     // Ensure we have 3 unique distractors that don't match correct or trap
     const existingWords = new Set([vocab.correctWord.toLowerCase(), vocab.trapWord.toLowerCase()]);
-    const availableDistractors = [...vocab.distractors];
+    const availableDistractors: string[] = [];
+
+    for (const d of vocab.distractors) {
+      if (!existingWords.has(d.toLowerCase())) {
+        availableDistractors.push(d);
+        existingWords.add(d.toLowerCase());
+      }
+    }
 
     // If needed, pull more words from the general vocabulary pool
     if (availableDistractors.length < 3) {

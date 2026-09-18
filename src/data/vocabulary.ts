@@ -177,7 +177,7 @@ export const VOCABULARY_LIST: VocabWord[] = [
     trapWord: 'invent',
     trapMeaning: 'invent 는 "발명하다"예요! 생일파티 등에 부르는 것은 invite!',
     phonetic: '/ɪnˈvaɪt/',
-    distractors: ['inside', 'invent', 'involve'],
+    distractors: ['inside', 'intend', 'involve'],
     semester: 'semester1',
     hintSentence: 'I want to ___ all my classmates to my birthday party.',
     category: '친구와 일상'

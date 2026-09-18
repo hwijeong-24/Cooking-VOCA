@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { speakEnglishWord, playFinishFanfare } from '../utils/audio';
+import { getWordMeaning } from '../utils/customerFeedback';
 
 interface ResultScreenProps {
   totalCoins: number;
@@ -300,19 +301,28 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
                         </div>
                       </div>
 
-                      {/* Trap explanation */}
-                      <div className="mt-1.5 text-xs text-amber-950 bg-white/70 p-2 rounded-xl border border-amber-200/80 flex items-start gap-1.5">
-                        <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
-                        <div className="leading-snug">
-                          {wasTrap ? (
+                      {/* Detailed Pedagogical Feedback */}
+                      {wasTrap ? (
+                        <div className="mt-1.5 text-xs text-amber-950 bg-amber-50/90 p-2 rounded-xl border border-amber-300 flex items-start gap-1.5">
+                          <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                          <div className="leading-snug">
                             <span className="font-bold text-rose-700">
-                              [함정 단어 선택!] {item.trapMeaning}
-                            </span>
-                          ) : (
+                              [스펠링 함정 선택!]
+                            </span>{' '}
                             <span>{item.trapMeaning}</span>
-                          )}
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="mt-1.5 text-xs text-stone-800 bg-stone-50 p-2 rounded-xl border border-stone-200 flex items-start gap-1.5">
+                          <XCircle className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
+                          <div className="leading-snug">
+                            <span className="font-bold text-rose-600">[일반 오답 선택]</span>{' '}
+                            <span>
+                              선택하신 '{item.selectedWord}'은(는) '{getWordMeaning(item.selectedWord)}'의 뜻으로, 정답 '{item.correctWord}'({item.koreanMeaning})과(와) 다른 재료입니다.
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

@@ -5,6 +5,7 @@ import { DishIllustration } from './DishIllustration';
 import { getDishInfo } from '../data/dishes';
 import { Sparkles, ArrowRight, CheckCircle2, XCircle, Coins, Award, Volume2, Flame, Ban, AlertTriangle } from 'lucide-react';
 import { speakEnglishWord } from '../utils/audio';
+import { getWordMeaning } from '../utils/customerFeedback';
 
 export interface DishIngredientSummary {
   ingredientNumber: number;
@@ -407,9 +408,17 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
                   </div>
 
                   {!ing.isCorrect && (
-                    <p className="text-[11px] text-rose-200 bg-black/30 px-2 py-1 rounded-lg border border-rose-500/30 mt-2 line-clamp-2 leading-tight">
-                      ⚠️ <span className="font-bold text-amber-300">함정:</span> {ing.trapMeaning}
-                    </p>
+                    <div className="mt-2 text-[11px] bg-black/30 p-2 rounded-lg border border-rose-500/30 leading-snug">
+                      {ing.selectedWord.toLowerCase() === ing.trapWord.toLowerCase() ? (
+                        <p className="text-amber-200">
+                          ⚠️ <span className="font-bold text-amber-300">[스펠링 함정 선택]</span> {ing.trapMeaning}
+                        </p>
+                      ) : (
+                        <p className="text-rose-200">
+                          ❌ <span className="font-bold text-rose-300">[오답 재료 선택]</span> '{ing.selectedWord}'은(는) '{getWordMeaning(ing.selectedWord)}'의 뜻으로, 주문 재료 '{ing.koreanMeaning}'(정답: {ing.correctWord})과(와) 다릅니다.
+                        </p>
+                      )}
+                    </div>
                   )}
                 </div>
               ))}
