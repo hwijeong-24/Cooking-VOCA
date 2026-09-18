@@ -629,29 +629,29 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                       {/* Customer Angry Review Banner */}
                       <div className={`border-2 rounded-xl p-2.5 sm:p-3 shadow-md ${
                         isAll3IngredientsWrong
-                          ? 'bg-red-950/90 border-rose-500 shadow-rose-950/70 animate-pulse'
+                          ? 'bg-red-950/90 border-rose-500 shadow-rose-950/70'
                           : 'bg-rose-950/80 border-rose-500/60'
                       }`}>
                         <div className="flex items-center justify-between gap-2 mb-1">
                           <div className="flex items-center gap-1.5 font-black text-xs sm:text-sm text-rose-300">
-                            <span className="text-base">{isAll3IngredientsWrong ? '🌋' : errorFeedback?.reactionEmoji || '😾'}</span>
+                            <span className="text-base">{isAll3IngredientsWrong ? '🥺' : errorFeedback?.reactionEmoji || '😿'}</span>
                             <span>
                               {isAll3IngredientsWrong
-                                ? '💥 3연속 오답! 손님 극대노 폭발'
-                                : errorFeedback?.reviewTitle || '손님의 1점 악평'}
+                                ? '😢 3연속 오답! 손님이 아쉬워해요'
+                                : errorFeedback?.reviewTitle || '손님의 솔직한 리뷰'}
                             </span>
                           </div>
                           <div className="flex items-center gap-1 bg-rose-900/80 text-rose-100 text-[10px] font-black px-2 py-0.5 rounded-md border border-rose-500/60">
                             <span>{isAll3IngredientsWrong ? '☆☆☆☆☆' : '★☆☆☆☆'}</span>
-                            <span>{isAll3IngredientsWrong ? '별점 0점 (극대노)' : '별점 1점'}</span>
+                            <span>{isAll3IngredientsWrong ? '별점 0점 (아쉬움)' : '별점 1점'}</span>
                           </div>
                         </div>
 
                         {/* In-character Customer Speech Quote */}
                         <p className="text-xs sm:text-sm text-rose-100 font-bold leading-relaxed italic bg-black/30 p-2 rounded-lg border border-rose-500/30">
                           {isAll3IngredientsWrong
-                            ? `"${question.customer.name}: 3가지 재료가 모조리 틀렸잖아?! 냄새만 맡아도 끔찍해! 이런 쓰레기 괴식은 절대 안 먹어!! 🔥😡"`
-                            : errorFeedback?.customerQuote || `"${question.customer.name}: 앗, 주문한 재료가 아니에요!"`}
+                            ? `"${question.customer.name}: 앗... 3가지 재료가 전부 다르게 들어갔어요! 제가 생각한 맛과 너무 달라서 맛이 조금 이상해요... 힝! 😿"`
+                            : errorFeedback?.customerQuote || `"${question.customer.name}: 앗, 제가 주문한 재료가 아니에요!"`}
                         </p>
 
                         {/* Specific Distinction between Chosen Wrong Word and Correct Word - Large English Typography */}
@@ -707,7 +707,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                         <span>
                           {isLastIngredientOfCustomer
                             ? isAll3IngredientsWrong
-                              ? '💥 요리 대실패! 손님 극대노 상태'
+                              ? '😢 요리 미완성: 손님이 아쉬워해요'
                               : '요리 완성 리포트 준비 완료'
                             : '원할 때 즉시 다음 재료를 누르세요'}
                         </span>
@@ -719,7 +719,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                       onClick={handleManualNext}
                       className={`px-3.5 py-1.5 font-black text-xs sm:text-sm rounded-xl border-2 shadow-md flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all shrink-0 ${
                         isAll3IngredientsWrong
-                          ? 'bg-gradient-to-r from-rose-600 via-red-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white border-rose-300 shadow-rose-950/50'
+                          ? 'bg-gradient-to-r from-rose-600 via-rose-500 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white border-rose-300 shadow-rose-950/50'
                           : 'bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-stone-950 border-yellow-200'
                       }`}
                       id="next-order-btn"
@@ -727,7 +727,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                       <span>
                         {isLastIngredientOfCustomer
                           ? isAll3IngredientsWrong
-                            ? '요리 실패 결과 확인 💥'
+                            ? '요리 결과 확인하기 🍳'
                             : '요리 완성 보기 🍽️'
                           : question.ingredientNumber === 2
                           ? '마지막 재료 주문'

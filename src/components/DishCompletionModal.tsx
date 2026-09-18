@@ -43,57 +43,57 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
   const isPerfect = correctCount === 3;
   const isFailed = correctCount === 0;
 
-  // Character-specific extreme furious review when all 3 ingredients fail
+  // Character-specific mild, playful negative review when all 3 ingredients fail
   const getExtremeAngryReview = () => {
     switch (customer.animalType) {
       case 'cat':
         return {
-          title: '고양이 손님의 0점 분노 폭발 혹평',
-          badge: '극대노 🔥',
-          quote: `"${customer.name}: 냥?! 장난하냥?! 3개 재료가 모조리 엉터리라 냄새만 맡아도 털이 곤두선다냥!! 이런 끔찍한 걸 음식이라고 내놓다니 당장 주방장 자격증 반납해라냥!! 🔥😾"`,
-          detail: '고양이 손님이 식탁을 엎을 듯 꼬리를 곤두세우며 0점 영수증을 던졌습니다.'
+          title: '고양이 손님의 뾰로통한 한마디',
+          badge: '시무룩 😿',
+          quote: `"${customer.name}: 냥... 재료가 다 달라서 맛이 너무 이상하다냥... 제가 시킨 ${dishName} 맛이 전혀 아니에요! 힝, 다음엔 꼭 맛있게 만들어달라냥! 😿💧"`,
+          detail: '고양이 손님이 입술을 삐죽이며 아쉬운 표정으로 식탁을 바라봅니다.'
         };
       case 'bear':
         return {
-          title: '곰 미식가의 우렁찬 분노 혹평',
-          badge: '극대노 🔥',
-          quote: `"${customer.name}: 크워어엉!! 배고파 죽겠는데 3가지 재료가 다 엉터리라니! 먹을 수도 없는 검은 숯덩이를 주고 돈을 받으려 했소?! 당장 환불하시오!! 🐻💥"`,
-          detail: '곰 손님이 발을 쿵쿵 구르며 주방을 매섭게 노려보고 있습니다.'
+          title: '곰돌이 손님의 시무룩한 후기',
+          badge: '배고파요 🐻',
+          quote: `"${customer.name}: 으앙~ 곰돌이 배고픈데 재료 3개가 전부 바뀌어버렸어요! 맛이 너무 알쏭달쏭해서 오늘은 아쉽지만 먹기 어렵겠어요. 다음엔 꼭 성공해주세요! 🐻💦"`,
+          detail: '곰 손님이 아쉬워하며 배를 통통 두드리고 있습니다.'
         };
       case 'rabbit':
         return {
-          title: '토끼 손님의 경악과 눈물의 분노',
-          badge: '극대노 🔥',
-          quote: `"${customer.name}: 꺄악!! 세상에 어떻게 3가지 재료를 모조리 틀릴 수가 있죠?! 귀가 찢어질 정도로 끔찍해요! 위생국에 고발하기 전에 셰프 사과하세요!! 🐰🌋"`,
-          detail: '토끼 손님이 기겁하며 테이블을 박차고 나갈 준비를 하고 있습니다.'
+          title: '토끼 손님의 아쉬운 리뷰',
+          badge: '아쉬워요 🐰',
+          quote: `"${customer.name}: 앗... 제가 주문했던 것과 다른 재료들만 들어갔어요! 맛이 너무 이상해서 이번 접시는 패스해야겠어요... 셰프님 다음 요리는 파이팅이에요! 🐰💧"`,
+          detail: '토끼 손님이 머리를 긁적이며 미소를 짓고 있습니다.'
         };
       case 'dog':
         return {
-          title: '강아지 단골손님의 배신감 어린 분노',
-          badge: '극대노 🔥',
-          quote: `"${customer.name}: 으르렁 컹컹!! 내가 제일 아끼는 ${dishName}인데 3개 재료 철자를 싹 다 틀리다니! 내 꼬리가 축 처질 정도로 맛없고 끔찍해요!! 🐶💢"`,
-          detail: '강아지 손님이 이빨을 드러내며 최악의 0점 리뷰를 남겼습니다.'
+          title: '강아지 단골손님의 갸우뚱 피드백',
+          badge: '시무룩 🐶',
+          quote: `"${customer.name}: 낑낑... 제가 너무 기대했던 ${dishName}인데 철자가 조금 헷갈리셨나 봐요! 맛이 낯설어서 아쉽지만, 다음엔 꼭 맛있는 요리로 부탁해요! 🐶🦴"`,
+          detail: '강아지 손님이 꼬리를 살랑이며 다음 기회를 기대하고 있습니다.'
         };
       case 'fox':
         return {
-          title: '여우 평론가의 서늘한 0점 독설',
-          badge: '극대노 🔥',
-          quote: `"${customer.name}: 흥, 소문난 레스토랑이라더니 영단어 기초도 모르는 풋내기였군요. 3개 재료가 전부 쓰레기통 직행감입니다. 식당 문 닫으시죠! 🦊⚡"`,
-          detail: '여우 평론가가 미식 잡지에 0점 최악의 불합격 평점을 작성했습니다.'
+          title: '여우 손님의 부드러운 조언',
+          badge: '복습 권장 🦊',
+          quote: `"${customer.name}: 흠, 세 가지 재료의 철자가 모두 빗나갔군요. 이번 요리는 아쉽지만 맛의 조화가 부족해요. 단어 스펠링을 다시 한번 꼼꼼히 복습해 볼까요? 🦊✏️"`,
+          detail: '여우 손님이 노트에 미식 팁을 적어 주방에 건넸습니다.'
         };
       case 'panda':
         return {
-          title: '팬더 손님의 깊은 빡침',
-          badge: '극대노 🔥',
-          quote: `"${customer.name}: 쿵!! 느긋한 나조차 참을 수 없을 만큼 최악의 괴식이야! 3개 재료를 하나도 못 맞추다니 주방 청소부터 다시 하고 와! 🐼🔥"`,
-          detail: '팬더 손님이 다크서클이 짙어진 채 분노를 삭이지 못하고 있습니다.'
+          title: '판다 손님의 머쓱한 반응',
+          badge: '어색해요 🐼',
+          quote: `"${customer.name}: 으음... 맛이 생각했던 것과 너무 달라서 깜짝 놀랐어요! 3개 재료 영단어를 잘 기억해서 다음엔 진짜 맛있는 요리를 부탁해요! 🐼🍃"`,
+          detail: '판다 손님이 머리를 긁적이며 물을 한 모금 마십니다.'
         };
       default:
         return {
-          title: `${customer.name}의 극대노 0점 최악 리뷰`,
-          badge: '극대노 🔥',
-          quote: `"${customer.name}: 3개 재료가 전부 잘못 들어가 요리가 완전히 타버렸습니다! 도저히 한 입도 먹을 수 없어요! 당장 환불해주세요!! 🔥😡"`,
-          detail: '손님이 극도로 분노하여 식당에 0점 혹평을 남겼습니다.'
+          title: `${customer.name}의 아쉬운 한마디`,
+          badge: '아쉬워요 🥺',
+          quote: `"${customer.name}: 재료가 다르게 들어가서 맛이 조금 이상해요... 아쉽지만 이번 요리는 다음 기회에 다시 도전해주세요! 🥺"`,
+          detail: '손님이 아쉬운 표정으로 다음 요리를 응원했습니다.'
         };
     }
   };
@@ -128,14 +128,14 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
       >
         {/* Top Glowing Ribbon Banner */}
         {isFailed ? (
-          <div className="bg-gradient-to-r from-rose-800 via-red-600 to-rose-800 px-4 py-2.5 text-center text-white font-black text-sm sm:text-base tracking-wide flex items-center justify-center gap-2 shadow-md shrink-0 border-b border-rose-400/50 animate-pulse">
-            <Flame className="w-5 h-5 text-amber-300" />
+          <div className="bg-gradient-to-r from-rose-800 via-rose-700 to-rose-800 px-4 py-2.5 text-center text-white font-black text-sm sm:text-base tracking-wide flex items-center justify-center gap-2 shadow-md shrink-0 border-b border-rose-400/50">
+            <span className="text-base">🍳</span>
             <span>
               {isFinalDish
-                ? '💥 요리 대실패! 마지막 손님 극대노 폭발!'
-                : `💥 요리 대실패! 손님 ${customerNumber}/${totalCustomers} 극대노 폭발!`}
+                ? '요리 미완성: 마지막 손님이 아쉬워해요 🥺'
+                : `요리 미완성: 손님 ${customerNumber}/${totalCustomers}이(가) 아쉬워해요 🥺`}
             </span>
-            <Flame className="w-5 h-5 text-amber-300" />
+            <span className="text-base">🥺</span>
           </div>
         ) : (
           <div className="bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 px-4 py-2.5 text-center text-amber-950 font-black text-sm sm:text-base tracking-wide flex items-center justify-center gap-2 shadow-md shrink-0">
@@ -163,7 +163,7 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
                 mood={isFailed ? 'angry' : correctCount >= 2 ? 'happy' : 'waiting'}
                 size="sm"
                 className={`shrink-0 ${
-                  isFailed ? 'ring-4 ring-rose-500/80 rounded-full shadow-lg shadow-rose-900/60 animate-bounce' : ''
+                  isFailed ? 'ring-3 ring-rose-400/70 rounded-full shadow-md' : ''
                 }`}
               />
               <div>
@@ -172,7 +172,7 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
                     isFailed ? 'text-rose-300' : 'text-amber-300'
                   }`}
                 >
-                  {customer.name}의 주문 {isFailed && '· 😡 극대노 상태'}
+                  {customer.name}의 주문 {isFailed && '· 🥺 시무룩 상태'}
                 </span>
                 <h3 className="text-lg sm:text-xl font-black text-white flex items-center gap-1.5">
                   <span>{dishInfo.badgeEmoji}</span>
@@ -250,16 +250,16 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
               </svg>
 
               <h4 className="text-base sm:text-lg font-black text-rose-300 mt-1">
-                💥 타버린 실패작: {dishName} 조리 실패!
+                🍳 아쉬운 요리: {dishName} 조리 미완성
               </h4>
               <p className="mt-1 text-xs sm:text-sm text-rose-200/90 font-medium max-w-md px-2 leading-relaxed">
-                3개 재료의 영단어를 모두 틀려 요리가 새까맣게 타버렸습니다. 손님 식탁에 올릴 수 없어 전량 폐기 처분되었습니다!
+                3개 재료의 영단어가 어긋나 기대했던 맛을 내지 못했습니다. 아쉽지만 이번 접시는 손님 식탁에 올리지 못했어요!
               </p>
 
               {/* Failed Tag Badge */}
               <div className="absolute top-2.5 left-2.5 bg-rose-700 text-white font-black text-[11px] px-2.5 py-1 rounded-xl border border-rose-400 shadow-md flex items-center gap-1">
                 <Ban className="w-3.5 h-3.5" />
-                <span>요리 미완성 (서빙 불가)</span>
+                <span>요리 미완성 (서빙 보류)</span>
               </div>
             </div>
           ) : (
@@ -284,21 +284,21 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
             </div>
           )}
 
-          {/* Customer Quote / Extreme Angry Feedback */}
+          {/* Customer Quote / Gentle Negative Review */}
           {isFailed ? (
-            <div className="bg-gradient-to-r from-rose-950 via-red-950 to-rose-950 border-2 border-rose-500/70 rounded-2xl p-3.5 text-center shadow-lg relative overflow-hidden">
+            <div className="bg-gradient-to-r from-rose-950 via-stone-900 to-rose-950 border-2 border-rose-500/50 rounded-2xl p-3.5 text-center shadow-lg relative overflow-hidden">
               <div className="flex items-center justify-center gap-2 mb-1.5">
-                <Flame className="w-4 h-4 text-rose-400 animate-bounce" />
+                <span className="text-base">🥺</span>
                 <span className="text-xs font-black text-rose-300 uppercase tracking-wide">
                   {extremeAngry.title}
                 </span>
-                <Flame className="w-4 h-4 text-rose-400 animate-bounce" />
+                <span className="text-base">🥺</span>
               </div>
-              <p className="text-sm sm:text-base text-rose-100 font-extrabold italic leading-relaxed">
+              <p className="text-sm sm:text-base text-rose-100 font-bold italic leading-relaxed">
                 {extremeAngry.quote}
               </p>
-              <p className="text-[11px] text-rose-300/80 mt-1.5 font-semibold bg-black/30 py-1 px-2 rounded-lg inline-block border border-rose-500/30">
-                ⚠️ {extremeAngry.detail}
+              <p className="text-[11px] text-rose-300/80 mt-1.5 font-medium bg-black/30 py-1 px-2 rounded-lg inline-block border border-rose-500/30">
+                💬 {extremeAngry.detail}
               </p>
             </div>
           ) : (
@@ -478,7 +478,7 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
         <div
           className={`p-4 border-t flex items-center justify-between gap-3 shrink-0 ${
             isFailed
-              ? 'bg-stone-950 border-rose-900/60'
+              ? 'bg-stone-950 border-rose-900/40'
               : 'bg-stone-950 border-amber-700/40'
           }`}
         >
@@ -486,7 +486,7 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
             {isFinalDish
               ? '모든 코스가 끝났습니다. 결산 결과를 확인하세요!'
               : isFailed
-              ? '손님이 몹시 화가 났습니다. 마음을 가다듬고 다음 손님을 맞이하세요.'
+              ? '손님이 조금 아쉬워하고 있어요. 다음 손님 요리에 다시 힘내봐요!'
               : '준비가 완료되면 버튼을 눌러 다음 손님을 맞이하세요.'}
           </span>
 
@@ -494,7 +494,7 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
             onClick={onNextCustomer}
             className={`w-full sm:w-auto ml-auto px-6 py-3 font-black text-sm sm:text-base rounded-2xl shadow-xl flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-all ${
               isFailed
-                ? 'bg-gradient-to-r from-rose-600 via-red-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white border-2 border-rose-400 shadow-rose-950/60'
+                ? 'bg-gradient-to-r from-rose-600 via-rose-500 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white border-2 border-rose-300/80 shadow-rose-950/60'
                 : 'bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-400 hover:from-amber-300 hover:to-amber-400 text-stone-950 border-2 border-yellow-200'
             }`}
             id="next-customer-btn"
@@ -503,7 +503,7 @@ export const DishCompletionModal: React.FC<DishCompletionModalProps> = ({
               {isFinalDish
                 ? '🏆 최종 결산 리포트 확인'
                 : isFailed
-                ? `화난 손님 보내고 다음 손님 받기 (${customerNumber + 1}/${totalCustomers})`
+                ? `아쉽지만 다음 손님 맞이하기 (${customerNumber + 1}/${totalCustomers})`
                 : `다음 손님 맞이하기 (${customerNumber + 1}/${totalCustomers})`}
             </span>
             <ArrowRight className="w-5 h-5 stroke-[2.5]" />

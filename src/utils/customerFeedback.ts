@@ -32,26 +32,26 @@ export function getSpecificCustomerErrorFeedback(
     switch (animal) {
       case 'cat':
         return {
-          customerQuote: `“우웩! 셰프님! 저는 '${targetMeaning}' 재료를 원했는데, 스펠링이 헷갈리는 '${selectedWrongWord}'을(를) 넣으시면 어떡해요냥! 이건 ${trapMeaning}잖아요! 맛이 엉망진창이 됐다냥! 😿”`,
-          reviewTitle: `냥냥이의 1점 악평: “스펠링 함정에 낚인 요리다냥!”`,
+          customerQuote: `“냥? 셰프님! 저는 '${targetMeaning}' 재료를 원했는데, 철자가 쏙 닮은 '${selectedWrongWord}'(${trapMeaning})이(가) 들어갔다냥! 맛이 살짝 알쏭달쏭해요냥~ 😿”`,
+          reviewTitle: `냥냥이의 시무룩한 리뷰: “제가 주문한 재료가 아니에요냥!”`,
           specificExplanation: `단어 '${selectedWrongWord}'은(는) '${correct}'와 철자가 비슷하지만 뜻이 전혀 다른 함정 단어(${trapMeaning})입니다.`,
-          reactionEmoji: '😾',
+          reactionEmoji: '😿',
           isTrap: true,
         };
 
       case 'bear':
         return {
-          customerQuote: `“으아앙! 배고파 죽겠는데 '${targetMeaning}' 대신 '${selectedWrongWord}'(${trapMeaning})을(를) 넣으면 어떡해요! 정답 '${correct}' 스펠링을 헷갈리신 거죠?! 곰 배가 아프다구요! 🐻💢”`,
-          reviewTitle: `배고픈 곰돌이의 불만 폭발: “달콤함은커녕 함정 맛이 나요!”`,
+          customerQuote: `“어라라? '${targetMeaning}' 대신 철자가 헷갈리는 '${selectedWrongWord}'(${trapMeaning})을(를) 넣으셨네요! 곰돌이가 기대했던 달콤한 맛이 아니에요, 흑흑! 🐻💦”`,
+          reviewTitle: `곰돌이의 아쉬운 표정: “이 맛은 조금 낯설어요!”`,
           specificExplanation: `정답 '${correct}'(${targetMeaning}) 대신 함정 단어 '${selectedWrongWord}'(${trapMeaning})을(를) 넣었습니다.`,
-          reactionEmoji: '🐻‍❄️',
+          reactionEmoji: '🐻',
           isTrap: true,
         };
 
       case 'rabbit':
         return {
-          customerQuote: `“앗! 셰프님! '${targetMeaning}'을(를) 달라고 했는데 '${selectedWrongWord}'을(를) 넣으셨어요! '${selectedWrongWord}'은(는) '${trapMeaning}'라는 뜻이라 신선한 ${dish}의 맛이 완전히 변해버렸어요! 🐰💦”`,
-          reviewTitle: `토끼 학생의 속상한 리뷰: “레시피 단어가 헷갈리셨나 봐요!”`,
+          customerQuote: `“앗! 셰프님! '${targetMeaning}'을(를) 부탁드렸는데 닮은꼴 철자인 '${selectedWrongWord}'(${trapMeaning})이(가) 쏙 들어갔어요! 신선한 맛이 살짝 어색해졌어요! 🐰💧”`,
+          reviewTitle: `토끼 학생의 갸우뚱 리뷰: “철자가 살짝 헷갈리셨나 봐요!”`,
           specificExplanation: `'${correct}'와(과) '${selectedWrongWord}'은(는) 1학년 시험에 가장 자주 나오는 철자 혼동 어휘(${trapMeaning})예요.`,
           reactionEmoji: '🐰',
           isTrap: true,
@@ -59,8 +59,8 @@ export function getSpecificCustomerErrorFeedback(
 
       case 'dog':
         return {
-          customerQuote: `“컹컹! 내가 단골인데 이런 실수를?! '${targetMeaning}' 재료 자리에 '${selectedWrongWord}'(${trapMeaning})이(가) 들어가다니! 철자 함정에 속으셨군요, 셰프님! 🐶”`,
-          reviewTitle: `멍멍 단골손님의 뼈아픈 피드백: “입맛을 뚝 떨어뜨린 함정 단어!”`,
+          customerQuote: `“컹컹! '${targetMeaning}' 재료 자리에 스펠링이 비슷한 '${selectedWrongWord}'(${trapMeaning})이(가) 쏙 들어가다니! 철자 함정에 깜빡 속으셨군요, 셰프님! 🐶”`,
+          reviewTitle: `멍멍 단골손님의 아쉬운 한마디: “함정 단어를 조심하세요!”`,
           specificExplanation: `헷갈리는 함정 단어 '${selectedWrongWord}'(${trapMeaning}) 대신 올바른 스펠링 '${correct}'을(를) 기억하세요!`,
           reactionEmoji: '🐶',
           isTrap: true,
@@ -68,8 +68,8 @@ export function getSpecificCustomerErrorFeedback(
 
       case 'fox':
         return {
-          customerQuote: `“흠! 기본기가 부족하군요! '${targetMeaning}'은(는) 당연히 '${correct}'이거늘, 스펠링이 유사한 '${selectedWrongWord}'(${trapMeaning})을(를) 집어넣다니 이 접시는 불합격입니다! 🦊”`,
-          reviewTitle: `여우 교수님의 혹평: “철자 구분을 다시 공부하고 오세요.”`,
+          customerQuote: `“흠! '${targetMeaning}'의 진짜 철자는 '${correct}'인데, 유사한 '${selectedWrongWord}'(${trapMeaning})에 살짝 낚이셨군요. 다음엔 스펠링을 잘 비교해보세요! 🦊✨”`,
+          reviewTitle: `여우 손님의 친절한 조언: “함정 철자를 다시 확인해볼까요?”`,
           specificExplanation: `주의: '${selectedWrongWord}'(${trapMeaning})은(는) 스펠링 착각을 유도하는 대표적인 트랩 어휘입니다.`,
           reactionEmoji: '🦊',
           isTrap: true,
@@ -77,8 +77,8 @@ export function getSpecificCustomerErrorFeedback(
 
       case 'panda':
         return {
-          customerQuote: `“콜록콜록! 건강한 맛을 기대했는데 '${targetMeaning}' 대신 엉뚱한 '${selectedWrongWord}'(${trapMeaning})이(가) 씹혀요! '${correct}'을(를) 넣으셔야죠! 🐼”`,
-          reviewTitle: `판다 선배의 당황한 후기: “대나무 향이 다 날아갔어요!”`,
+          customerQuote: `“어라? 상쾌한 맛을 기대했는데 '${targetMeaning}' 대신 '${selectedWrongWord}'(${trapMeaning})이(가) 씹혀요! 맛이 조금 이상해요! 🐼”`,
+          reviewTitle: `판다 손님의 머쓱한 후기: “제가 생각한 재료가 아니에요!”`,
           specificExplanation: `'${selectedWrongWord}'은(는) '${targetMeaning}'이(가) 아니라 '${trapMeaning}'을(를) 의미합니다.`,
           reactionEmoji: '🐼',
           isTrap: true,
@@ -86,8 +86,8 @@ export function getSpecificCustomerErrorFeedback(
 
       case 'penguin':
         return {
-          customerQuote: `“차갑게 평가하겠습니다. '${targetMeaning}'에 필수적인 '${correct}' 대신 함정 철자인 '${selectedWrongWord}'(${trapMeaning})을(를) 투입해 식감이 무너졌습니다. 별점 반 개! 🐧”`,
-          reviewTitle: `펭귄 요리평론가의 혹평: “치명적인 철자 오류로 탈락입니다.”`,
+          customerQuote: `“솔직하게 말씀드릴게요. '${targetMeaning}'의 필수 단어인 '${correct}' 대신 함정 철자인 '${selectedWrongWord}'(${trapMeaning})이(가) 들어가서 식감이 어색해졌어요. 🐧”`,
+          reviewTitle: `펭귄 손님의 솔직한 평가: “올바른 철자를 챙겨주세요!”`,
           specificExplanation: `헷갈리기 쉬운 '${selectedWrongWord}'(${trapMeaning})에 주의하고, 정답 철자 '${correct}'을(를) 챙기세요.`,
           reactionEmoji: '🐧',
           isTrap: true,
@@ -96,7 +96,7 @@ export function getSpecificCustomerErrorFeedback(
       case 'koala':
       default:
         return {
-          customerQuote: `“깜짝 놀라 졸음이 확 깼어요! '${targetMeaning}' 요리에 왜 '${selectedWrongWord}'(${trapMeaning})을(를) 넣으신 건가요? 셰프님, 정답 '${correct}'을(를) 찾아주세요! 🐨”`,
+          customerQuote: `“깜짝 놀라 눈이 동그래졌어요! '${targetMeaning}' 요리에 왜 '${selectedWrongWord}'(${trapMeaning})이(가) 들어갔을까요? 셰프님, 진짜 정답 '${correct}'을(를) 찾아주세요! 🐨”`,
           reviewTitle: `${name}의 당황한 한마디: “이건 제가 주문한 재료가 아니에요!”`,
           specificExplanation: `'${selectedWrongWord}'은(는) ${trapMeaning}의 뜻을 가진 스펠링 함정입니다.`,
           reactionEmoji: '🐨',
@@ -109,8 +109,8 @@ export function getSpecificCustomerErrorFeedback(
   switch (animal) {
     case 'cat':
       return {
-        customerQuote: `“냥! 셰프님 눈에는 '${selectedWrongWord}'이(가) '${targetMeaning}'(으)로 보이나요냥?! 전혀 엉뚱한 단어를 넣어서 맛이 이상해졌다냥! 😾”`,
-        reviewTitle: `냥냥이의 실망 리뷰: “전혀 엉뚱한 재료를 넣으셨다냥!”`,
+        customerQuote: `“냥? 셰프님, '${targetMeaning}' 요리에 다른 재료인 '${selectedWrongWord}'이(가) 들어갔다냥! 맛이 살짝 이상하다냥~ 😿”`,
+        reviewTitle: `냥냥이의 시무룩한 리뷰: “엉뚱한 재료가 섞였어요냥!”`,
         specificExplanation: `선택하신 '${selectedWrongWord}'은(는) '${targetMeaning}'과(와) 무관합니다. 정답은 '${correct}'입니다.`,
         reactionEmoji: '😿',
         isTrap: false,
@@ -118,8 +118,8 @@ export function getSpecificCustomerErrorFeedback(
 
     case 'bear':
       return {
-        customerQuote: `“으앙! '${targetMeaning}'이(가) 아니라 엉뚱한 '${selectedWrongWord}'을(를) 넣으면 어떡해요! 이 ${dish}는 못 먹겠어요, 새로 만들어주세요! 🐻”`,
-        reviewTitle: `배고픈 곰돌이의 찡그림: “이 맛이 아니야!”`,
+        customerQuote: `“으앙! '${targetMeaning}' 자리에 엉뚱한 '${selectedWrongWord}'을(를) 넣으시면 맛이 너무 낯설어요! 다음엔 꼭 정답을 골라주세요! 🐻”`,
+        reviewTitle: `곰돌이의 아쉬운 표정: “제가 주문한 맛이 아니에요!”`,
         specificExplanation: `'${targetMeaning}'에 알맞은 올바른 영어 단어는 '${correct}'입니다.`,
         reactionEmoji: '🐻',
         isTrap: false,
@@ -127,8 +127,8 @@ export function getSpecificCustomerErrorFeedback(
 
     case 'rabbit':
       return {
-        customerQuote: `“어라? 제가 주문한 '${targetMeaning}' 재료는 어디 가고 엉뚱한 '${selectedWrongWord}'이(가) 들어있죠? 정답 '${correct}'을(를) 넣어주셔야 해요! 🐰”`,
-        reviewTitle: `토끼 학생의 의아한 표정: “다른 재료가 섞였어요!”`,
+        customerQuote: `“어라? 제가 주문한 '${targetMeaning}' 재료 대신 '${selectedWrongWord}'이(가) 쏙 들어가 있어요! 정답 '${correct}'을(를) 넣어주시면 좋겠어요! 🐰”`,
+        reviewTitle: `토끼 학생의 아쉬운 표정: “다른 재료가 섞였어요!”`,
         specificExplanation: `'${targetMeaning}'의 올바른 영어 철자는 '${correct}'입니다. '${selectedWrongWord}'은(는) 오답입니다.`,
         reactionEmoji: '🐰',
         isTrap: false,
@@ -136,8 +136,8 @@ export function getSpecificCustomerErrorFeedback(
 
     case 'dog':
       return {
-        customerQuote: `“컹! 셰프님 레시피 북을 잘못 보신 것 같아요! '${targetMeaning}' 자리에 왜 '${selectedWrongWord}'이(가) 들어간 건가요?! 🐶”`,
-        reviewTitle: `멍멍 단골손님의 갸우뚱: “주문이 완전히 잘못 들어갔어요!”`,
+        customerQuote: `“컹! 셰프님, '${targetMeaning}' 자리에 엉뚱한 '${selectedWrongWord}'이(가) 들어갔어요! 진짜 단어인 '${correct}'을(를) 찾아주세요! 🐶”`,
+        reviewTitle: `멍멍 단골손님의 갸우뚱: “주문한 재료가 아니에요!”`,
         specificExplanation: `'${targetMeaning}'은(는) 영어로 '${correct}'입니다.`,
         reactionEmoji: '🐶',
         isTrap: false,
@@ -145,8 +145,8 @@ export function getSpecificCustomerErrorFeedback(
 
     case 'fox':
       return {
-        customerQuote: `“이런 이런, '${targetMeaning}'의 기본 단어인 '${correct}'을(를) 놓치고 무관한 '${selectedWrongWord}'을(를) 고르셨군요. 침착하게 단어를 다시 보세요! 🦊”`,
-        reviewTitle: `여우 교수님의 일침: “기초 단어 복습이 필요합니다.”`,
+        customerQuote: `“이런 이런, '${targetMeaning}'의 기본 단어인 '${correct}'을(를) 놓치고 다른 '${selectedWrongWord}'을(를) 고르셨군요. 침착하게 단어를 다시 보세요! 🦊”`,
+        reviewTitle: `여우 손님의 친절한 조언: “기초 단어 철자를 다시 확인해봐요!”`,
         specificExplanation: `'${targetMeaning}'을(를) 나타내는 정확한 단어는 '${correct}'입니다.`,
         reactionEmoji: '🦊',
         isTrap: false,
@@ -157,8 +157,8 @@ export function getSpecificCustomerErrorFeedback(
     case 'koala':
     default:
       return {
-        customerQuote: `“이런! '${targetMeaning}'을(를) 원했는데 엉뚱한 재료 '${selectedWrongWord}'을(를) 넣으셨어요! 올바른 재료는 '${correct}'라구요! 🍽️”`,
-        reviewTitle: `${name}의 불만족 후기: “주문한 재료가 아니에요!”`,
+        customerQuote: `“어라? '${targetMeaning}'을(를) 원했는데 다른 재료 '${selectedWrongWord}'이(가) 들어갔어요! 맛이 살짝 이상해요... 진짜 재료는 '${correct}'랍니다! 🍽️”`,
+        reviewTitle: `${name}의 시무룩한 후기: “맛이 조금 이상해요...”`,
         specificExplanation: `'${targetMeaning}'의 정답 영어 단어는 '${correct}'입니다.`,
         reactionEmoji: '😕',
         isTrap: false,
