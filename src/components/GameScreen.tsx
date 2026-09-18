@@ -759,7 +759,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             </span>
           </div>
 
-          {/* 5 Cards Layout: Responsive 2-column + 1-full-width in mobile portrait; spacious grid in tablet/laptop landscape */}
+          {/* 5 Cards Layout: 2-column grid with equal-sized cards; 5th card centered neatly without stretching */}
           <div className="grid grid-cols-2 gap-2 sm:gap-2.5 lg:gap-3" id="ingredient-cards-container">
             {question.options.map((opt, idx) => {
               const isThisSelected = selectedWord === opt.word;
@@ -803,8 +803,10 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                   type="button"
                   disabled={isAnswered}
                   onClick={() => handleSelectOption(opt.word)}
-                  className={`relative flex flex-col items-center justify-between p-2 sm:p-3 rounded-2xl border-2 sm:border-3 transition-all duration-200 cursor-pointer select-none active:scale-98 min-h-[72px] sm:min-h-[84px] lg:min-h-[88px] ${
-                    idx === 4 ? 'col-span-2' : ''
+                  className={`relative flex flex-col items-center justify-between p-2 sm:p-2.5 rounded-2xl border-2 sm:border-3 transition-all duration-200 cursor-pointer select-none active:scale-98 h-[78px] sm:h-[84px] lg:h-[88px] ${
+                    idx === 4
+                      ? 'col-span-2 justify-self-center w-[calc(50%-4px)] sm:w-[calc(50%-5px)] lg:w-[calc(50%-6px)]'
+                      : 'w-full'
                   } ${cardBg}`}
                   id={`ingredient-card-${idx}`}
                   style={{
@@ -826,9 +828,9 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                   </div>
 
                   {/* Center: English Word - Large, clear typography for 1st-year students */}
-                  <div className="my-0.5 text-center w-full">
+                  <div className="my-0.5 text-center w-full px-1">
                     <span
-                      className={`block text-base sm:text-xl md:text-2xl font-black tracking-tight leading-tight ${
+                      className={`block text-base sm:text-lg md:text-xl font-black tracking-tight leading-tight truncate ${
                         isAnswered && (isThisCorrect || isThisSelected) ? 'text-white' : 'text-amber-950'
                       }`}
                     >
