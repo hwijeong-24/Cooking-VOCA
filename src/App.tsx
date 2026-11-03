@@ -5,6 +5,14 @@ import { StartScreen } from './components/StartScreen';
 import { GameScreen } from './components/GameScreen';
 import { ResultScreen } from './components/ResultScreen';
 import { OrientationHelper } from './components/OrientationHelper';
+import { GoogleSheetsModal } from './components/GoogleSheetsModal';
+import {
+  getUserName,
+  setUserName as saveUserName,
+  getPlayCount,
+  incrementPlayCount,
+  getSheetWebhookUrl,
+} from './utils/googleSheets';
 
 export default function App() {
   const [screen, setScreen] = useState<'start' | 'game' | 'result'>('start');
@@ -14,6 +22,27 @@ export default function App() {
   const [coins, setCoins] = useState(0);
   const [history, setHistory] = useState<GameHistoryItem[]>([]);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [sentenceTaps, setSentenceTaps] = useState<Record<number, number>>({});
+
+  // Student profile & Google Sheets state
+  const [userName, setUserNameState] = useState<string>(() => getUserName());
+  const [playCount, setPlayCount] = useState<number>(() => getPlayCount(getUserName()));
+  const [isSheetModalOpen, setIsSheetModalOpen] = useState(false);
+  const hasSheetWebhook = Boolean(getSheetWebhookUrl());
+
+  const handleUpdateUserName = useCallback((newName: string) => {
+    const clean = newName.trim() || '익명 학생';
+    setUserNameState(clean);
+    saveUserName(clean);
+    setPlayCount(getPlayCount(clean));
+  }, []);
+
+  const handleSentenceTap = useCallback((orderNumber: number) => {
+    setSentenceTaps((prev) => ({
+      ...prev,
+      [orderNumber]: (prev[orderNumber] || 0) + 1,
+    }));
+  }, []);
 
   // Start new game session
   const handleStartGame = useCallback((chosenSemester = semester) => {
@@ -22,6 +51,7 @@ export default function App() {
     setCurrentQuestionIndex(0);
     setCoins(0);
     setHistory([]);
+    setSentenceTaps({});
     setScreen('game');
   }, [semester]);
 
@@ -43,10 +73,13 @@ export default function App() {
       if (currentQuestionIndex + 1 < questions.length) {
         setCurrentQuestionIndex((prev) => prev + 1);
       } else {
+        // Increment play count upon finishing game round
+        const nextCount = incrementPlayCount(userName);
+        setPlayCount(nextCount);
         setScreen('result');
       }
     },
-    [currentQuestionIndex, questions.length]
+    [currentQuestionIndex, questions.length, userName]
   );
 
   // Retry full 15 questions
@@ -88,6 +121,11 @@ export default function App() {
           onStartGame={() => handleStartGame(semester)}
           soundEnabled={soundEnabled}
           onToggleSound={toggleSound}
+          userName={userName}
+          onUpdateUserName={handleUpdateUserName}
+          playCount={playCount}
+          onOpenSheetModal={() => setIsSheetModalOpen(true)}
+          hasSheetWebhook={hasSheetWebhook}
         />
       )}
 
@@ -101,6 +139,8 @@ export default function App() {
           onToggleSound={toggleSound}
           onAnswerSubmitted={handleAnswerSubmitted}
           onExitToHome={handleBackToHome}
+          sentenceTapCount={sentenceTaps[questions[currentQuestionIndex].orderNumber] || 0}
+          onTapSentence={() => handleSentenceTap(questions[currentQuestionIndex].orderNumber)}
         />
       )}
 
@@ -114,8 +154,22 @@ export default function App() {
           onRetry={handleRetry}
           onRetryIncorrectOnly={handleRetryIncorrectOnly}
           onBackToHome={handleBackToHome}
+          userName={userName}
+          playCount={playCount}
+          onOpenSheetModal={() => setIsSheetModalOpen(true)}
+          hasSheetWebhook={hasSheetWebhook}
+          questions={questions}
+          sentenceTaps={sentenceTaps}
+          onTapSentence={handleSentenceTap}
         />
       )}
+
+      {/* Google Sheets Setup & Code Modal */}
+      <GoogleSheetsModal
+        isOpen={isSheetModalOpen}
+        onClose={() => setIsSheetModalOpen(false)}
+        currentUserName={userName}
+      />
 
       {/* Orientation helper notification for smartphones (portrait) & tablets/laptops (landscape) */}
       <OrientationHelper />

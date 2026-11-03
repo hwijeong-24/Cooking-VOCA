@@ -22,7 +22,8 @@ import {
   playCoinSound,
   playFinishFanfare,
   playDisasterFailSound,
-  speakEnglishWord
+  speakEnglishWord,
+  speakEnglishSentence
 } from '../utils/audio';
 
 interface DishModalState {
@@ -55,6 +56,8 @@ interface GameScreenProps {
     historyItem: GameHistoryItem;
   }) => void;
   onExitToHome: () => void;
+  sentenceTapCount?: number;
+  onTapSentence?: () => void;
 }
 
 export const GameScreen: React.FC<GameScreenProps> = ({
@@ -65,7 +68,9 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   soundEnabled,
   onToggleSound,
   onAnswerSubmitted,
-  onExitToHome
+  onExitToHome,
+  sentenceTapCount = 0,
+  onTapSentence,
 }) => {
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
@@ -145,6 +150,8 @@ export const GameScreen: React.FC<GameScreenProps> = ({
       isCorrect,
       trapWord: question.trapWord,
       trapMeaning: question.trapMeaning,
+      hintSentence: question.hintSentence,
+      sentenceTapCount,
     };
 
     if (isLastIngredientOfCustomer) {
@@ -291,6 +298,8 @@ export const GameScreen: React.FC<GameScreenProps> = ({
       isCorrect,
       trapWord: question.trapWord,
       trapMeaning: question.trapMeaning,
+      hintSentence: question.hintSentence,
+      sentenceTapCount,
     };
 
     if (isLastIngredientOfCustomer) {
@@ -577,11 +586,47 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                 </div>
               </div>
 
-              {/* Optional Hint Sentence context for CEFR A2 */}
+              {/* Interactive Sentence with Tap Frequency Tracking & TTS Audio */}
               {question.hintSentence && (
-                <p className="text-[11px] sm:text-xs text-amber-200/80 font-mono mt-1 bg-black/25 px-2 py-1 rounded-md border border-white/10">
-                  💡 예문 힌트: {question.hintSentence}
-                </p>
+                <div
+                  onClick={() => {
+                    if (onTapSentence) onTapSentence();
+                    speakEnglishSentence(question.hintSentence!, isAnswered ? question.correctWord : undefined);
+                  }}
+                  className="mt-2 bg-gradient-to-r from-amber-950/70 to-stone-900/80 hover:from-amber-900/80 hover:to-stone-850/90 active:scale-[0.99] border border-amber-500/40 hover:border-amber-400 p-2 sm:p-2.5 rounded-xl cursor-pointer transition-all shadow-md group select-none"
+                  title="문장을 탭하여 원어민 발음 듣기 & 탭 빈도 기록"
+                  id={`sentence-card-${question.orderNumber}`}
+                >
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <span className="text-[10px] sm:text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                      <Volume2 className="w-3.5 h-3.5 text-amber-400 group-hover:scale-110 transition-transform animate-pulse" />
+                      <span>💡 문장 탭하기 (원어민 발음 듣기 & 탭 기록)</span>
+                    </span>
+                    <span className="bg-amber-500/25 text-amber-200 border border-amber-400/40 text-[10px] sm:text-xs font-mono font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shadow-inner">
+                      <span>👆 탭:</span>
+                      <strong className="text-amber-100 font-black">{sentenceTapCount}회</strong>
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-stone-100 font-mono leading-relaxed">
+                    {isAnswered ? (
+                      question.hintSentence.includes('___') ? (
+                        <>
+                          {question.hintSentence.split('___')[0]}
+                          <span className={`px-1.5 py-0.5 rounded-md font-black underline mx-0.5 ${
+                            isUserCorrect ? 'bg-emerald-500/30 text-emerald-300' : 'bg-rose-500/30 text-rose-300'
+                          }`}>
+                            {question.correctWord}
+                          </span>
+                          {question.hintSentence.split('___')[1] || ''}
+                        </>
+                      ) : (
+                        question.hintSentence
+                      )
+                    ) : (
+                      question.hintSentence
+                    )}
+                  </p>
+                </div>
               )}
 
               {/* Immediate Feedback Reveal inside speech bubble when answered */}

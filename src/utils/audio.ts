@@ -207,3 +207,23 @@ export function speakEnglishWord(word: string) {
     console.debug('TTS failed', e);
   }
 }
+
+export function speakEnglishSentence(sentence: string, targetWord?: string) {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    let textToSpeak = sentence;
+    if (targetWord && targetWord.trim()) {
+      textToSpeak = sentence.replace(/_{2,}/g, targetWord.trim());
+    } else {
+      textToSpeak = sentence.replace(/_{2,}/g, 'something');
+    }
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.86; // pedagogical clear pace
+    utterance.pitch = 1.0;
+    window.speechSynthesis.speak(utterance);
+  } catch (e) {
+    console.debug('TTS sentence failed', e);
+  }
+}

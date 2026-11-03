@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { GameHistoryItem, Semester } from '../types';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
+import { GameHistoryItem, Semester, QuestionData } from '../types';
 import { ChefAvatar } from './ChefAvatar';
 import {
   Coins,
@@ -12,11 +12,20 @@ import {
   BookOpen,
   AlertTriangle,
   Sparkles,
-  Trophy
+  Trophy,
+  FileSpreadsheet,
+  MousePointerClick,
+  Layers
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { speakEnglishWord, playFinishFanfare } from '../utils/audio';
+import { speakEnglishWord, speakEnglishSentence, playFinishFanfare } from '../utils/audio';
 import { getWordMeaning } from '../utils/customerFeedback';
+import {
+  formatCurrentTimestamp,
+  sendGameResultToSheet,
+  getSheetWebhookUrl,
+  getUserName,
+} from '../utils/googleSheets';
 
 interface ResultScreenProps {
   totalCoins: number;
@@ -27,6 +36,13 @@ interface ResultScreenProps {
   onRetry: () => void;
   onRetryIncorrectOnly?: (incorrectWords: GameHistoryItem[]) => void;
   onBackToHome: () => void;
+  userName?: string;
+  playCount?: number;
+  onOpenSheetModal?: () => void;
+  hasSheetWebhook?: boolean;
+  questions?: QuestionData[];
+  sentenceTaps?: Record<number, number>;
+  onTapSentence?: (orderNumber: number) => void;
 }
 
 export const ResultScreen: React.FC<ResultScreenProps> = ({
@@ -36,11 +52,113 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
   soundEnabled,
   onRetry,
   onRetryIncorrectOnly,
-  onBackToHome
+  onBackToHome,
+  userName = getUserName(),
+  playCount = 1,
+  onOpenSheetModal,
+  hasSheetWebhook = false,
+  questions = [],
+  sentenceTaps = {},
+  onTapSentence,
 }) => {
   const incorrectList = history.filter((item) => !item.isCorrect);
   const correctCount = history.filter((item) => item.isCorrect).length;
   const isPerfect = incorrectList.length === 0;
+
+  // Local sentence taps state to allow interactive practice on result screen as well
+  const [localTaps, setLocalTaps] = useState<Record<number, number>>(sentenceTaps);
+
+  // Sync if external sentenceTaps changes
+  useEffect(() => {
+    setLocalTaps(sentenceTaps);
+  }, [sentenceTaps]);
+
+  const handleSentenceTapOnResult = (orderNumber: number, sentenceText: string, targetWord: string) => {
+    setLocalTaps((prev) => ({
+      ...prev,
+      [orderNumber]: (prev[orderNumber] || 0) + 1,
+    }));
+    if (onTapSentence) {
+      onTapSentence(orderNumber);
+    }
+    speakEnglishSentence(sentenceText, targetWord);
+  };
+
+  // Build sentence records & compute tap statistics
+  const sentenceRecords = useMemo(() => {
+    const list = questions.length > 0 ? questions : [];
+    if (list.length > 0) {
+      return list.map((q) => {
+        const taps = localTaps[q.orderNumber] || 0;
+        return {
+          orderNumber: q.orderNumber,
+          koreanMeaning: q.koreanMeaning,
+          correctWord: q.correctWord,
+          sentence: q.hintSentence || `${q.correctWord} (${q.koreanMeaning})`,
+          tapCount: taps,
+        };
+      });
+    }
+
+    // Fallback if questions array not provided directly: build from history
+    return history.map((h) => {
+      const taps = localTaps[h.questionNumber] || h.sentenceTapCount || 0;
+      return {
+        orderNumber: h.questionNumber,
+        koreanMeaning: h.koreanMeaning,
+        correctWord: h.correctWord,
+        sentence: h.hintSentence || `${h.correctWord} (${h.koreanMeaning})`,
+        tapCount: taps,
+      };
+    });
+  }, [questions, history, localTaps]);
+
+  const totalSentenceTaps = useMemo(() => {
+    return sentenceRecords.reduce((sum, r) => sum + r.tapCount, 0);
+  }, [sentenceRecords]);
+
+  const sentenceCount = sentenceRecords.length || 15;
+  const averageTaps = Number((totalSentenceTaps / sentenceCount).toFixed(2));
+
+  // Formatted string summary for Google Sheets cell
+  const sentenceTapsSummary = useMemo(() => {
+    if (sentenceRecords.length === 0) return '문장 탭 없음 (0회)';
+    return sentenceRecords
+      .map((r) => `[${r.orderNumber}] ${r.sentence} (${r.koreanMeaning}: ${r.tapCount}회)`)
+      .join(' | ');
+  }, [sentenceRecords]);
+
+  // Guard to ensure game results are sent to Google Sheets strictly ONCE per game finish
+  const hasAutoSentRef = useRef<boolean>(false);
+
+  // Automatically log to Google Sheets once in the background on mount
+  useEffect(() => {
+    if (hasAutoSentRef.current) return;
+    hasAutoSentRef.current = true;
+
+    const webhookUrl = getSheetWebhookUrl();
+    if (!webhookUrl) return;
+
+    const payload = {
+      timestamp: formatCurrentTimestamp(),
+      name: userName || '익명 학생',
+      play_count: playCount,
+      correct_count: correctCount,
+      wrong_count: incorrectList.length,
+      sentence_taps: sentenceTapsSummary,
+      average_taps: averageTaps,
+      total_sentence_taps: totalSentenceTaps,
+      sentence_details: sentenceRecords.map((r) => ({
+        sentence: r.sentence,
+        tapCount: r.tapCount,
+        word: r.correctWord,
+        meaning: r.koreanMeaning,
+      })),
+    };
+
+    // Silent background execution - no UI elements or duplicate records
+    sendGameResultToSheet(payload, webhookUrl);
+  }, [userName, playCount, correctCount, incorrectList.length, sentenceTapsSummary, averageTaps, totalSentenceTaps, sentenceRecords]);
 
   useEffect(() => {
     // Play fanfare
@@ -110,7 +228,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
         <div className="flex items-center gap-2">
           <button
             onClick={onBackToHome}
-            className="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 border-2 border-amber-700/30 rounded-full font-bold text-xs sm:text-sm text-amber-950 transition-all flex items-center gap-1 active:scale-95"
+            className="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 border-2 border-amber-700/30 rounded-full font-bold text-xs sm:text-sm text-amber-950 transition-all flex items-center gap-1 active:scale-95 cursor-pointer"
             id="back-home-top-btn"
           >
             <Home className="w-4 h-4 text-amber-800" />
@@ -178,6 +296,14 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
                   <div className="text-[9px] font-bold text-amber-800 uppercase">정답률</div>
                   <div className="text-lg sm:text-xl font-black text-amber-950">
                     {Math.round((correctCount / (history.length || 15)) * 100)}%
+                  </div>
+                </div>
+
+                {/* Player info */}
+                <div className="bg-amber-50 border border-amber-200 px-3.5 py-1.5 rounded-2xl text-center leading-tight">
+                  <div className="text-[9px] font-bold text-amber-800 uppercase">학생 (플레이 횟수)</div>
+                  <div className="text-sm sm:text-base font-black text-amber-950">
+                    {userName || '익명 학생'} <span className="text-xs text-amber-800 font-bold">({playCount}회차)</span>
                   </div>
                 </div>
               </div>
@@ -250,7 +376,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
               <Sparkles className="w-10 h-10 text-emerald-500 mx-auto mb-2 animate-bounce" />
               <h4 className="text-lg font-black">축하합니다! 모든 스펠링 함정을 완벽하게 피했습니다!</h4>
               <p className="text-xs sm:text-sm text-emerald-700 mt-1">
-                중1 필수 영단어와 헷갈리는 유사 철자를 훌륭하게 구별해 냈습니다.
+                초등 5학년 필수 영단어와 헷갈리는 유사 철자를 훌륭하게 구별해 냈습니다.
               </p>
             </div>
           ) : (
@@ -331,6 +457,74 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
           )}
           </div>
 
+          {/* Sentence Tap Frequency Breakdown Card */}
+          <div className="bg-white/85 backdrop-blur-md rounded-3xl p-4 sm:p-5 border-2 border-amber-300 shadow-lg">
+            <div className="flex items-center justify-between mb-2 pb-2 border-b border-amber-200">
+              <div className="flex items-center gap-2">
+                <MousePointerClick className="w-5 h-5 text-amber-700" />
+                <div>
+                  <h3 className="text-base sm:text-lg font-black text-amber-950 flex items-center gap-2">
+                    <span>문장별 탭 빈도 & 발음 학습 통계</span>
+                  </h3>
+                  <p className="text-[11px] text-stone-500 font-medium">
+                    문장을 탭하여 원어민 발음을 다시 듣고 복습할 수 있습니다.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1.5 shrink-0 bg-amber-100 text-amber-900 border border-amber-300 px-3 py-1 rounded-xl text-xs font-black shadow-xs">
+                <span>평균</span>
+                <span className="text-sm font-black text-amber-950">{averageTaps}회</span>
+                <span className="text-[10px] text-amber-700">(총 {totalSentenceTaps}회)</span>
+              </div>
+            </div>
+
+            {/* List of sentences with their tap counts */}
+            <div className="space-y-2 max-h-64 overflow-y-auto pr-1" id="sentence-taps-list">
+              {sentenceRecords.map((rec) => (
+                <div
+                  key={`sentence-${rec.orderNumber}`}
+                  className="p-2.5 bg-stone-50 hover:bg-amber-50/80 rounded-xl border border-stone-200/90 flex items-center justify-between gap-2.5 transition-colors"
+                >
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span className="w-6 h-6 rounded-lg bg-amber-200 text-amber-950 font-black text-xs flex items-center justify-center shrink-0">
+                      {rec.orderNumber}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-bold text-xs text-stone-900">[{rec.koreanMeaning}]</span>
+                        <span className="font-mono font-black text-xs text-emerald-700">{rec.correctWord}</span>
+                      </div>
+                      <p className="text-xs text-stone-600 font-mono truncate" title={rec.sentence}>
+                        {rec.sentence}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => handleSentenceTapOnResult(rec.orderNumber, rec.sentence, rec.correctWord)}
+                      className="px-2.5 py-1 bg-amber-100 hover:bg-amber-200 active:scale-95 text-amber-950 text-xs font-bold rounded-lg border border-amber-300 flex items-center gap-1 transition-all cursor-pointer shadow-2xs"
+                      title="문장 원어민 발음 듣기 (+1 탭)"
+                    >
+                      <Volume2 className="w-3.5 h-3.5 text-amber-700" />
+                      <span>듣기</span>
+                    </button>
+
+                    <span className={`px-2 py-0.5 rounded-lg text-xs font-mono font-bold border ${
+                      rec.tapCount > 0
+                        ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
+                        : 'bg-stone-200 text-stone-600 border-stone-300'
+                    }`}>
+                      👆 {rec.tapCount}회
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Action Buttons: Visible only on Smartphone portrait (bottom) */}
           <div className="flex lg:hidden flex-col sm:flex-row items-center justify-center gap-3 pt-1">
             <button
@@ -370,7 +564,7 @@ export const ResultScreen: React.FC<ResultScreenProps> = ({
 
       {/* Footer */}
       <footer className="w-full max-w-4xl mx-auto text-center text-xs text-amber-900/60 pt-2 border-t border-amber-900/10">
-        쿠킹 보카: 중1 영어 어휘 스펠링 트랩 클리닉
+        쿠킹 보카: 초등 5학년 필수 영단어 스펠링 트랩 클리닉
       </footer>
     </div>
   );

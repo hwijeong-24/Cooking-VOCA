@@ -1,6 +1,6 @@
 {
   "name": "Cooking Voca",
-  "description": "A 3-minute, spelling-focused restaurant English vocabulary game for 1st-year middle school students.",
+  "description": "A 3-minute, spelling-focused restaurant English vocabulary game for 5th-grade elementary school students with Google Sheets logging.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

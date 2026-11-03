@@ -62,6 +62,16 @@ export interface GameHistoryItem {
   isCorrect: boolean;
   trapWord: string;
   trapMeaning: string;
+  hintSentence?: string;
+  sentenceTapCount?: number;
+}
+
+export interface SentenceTapRecord {
+  orderNumber: number;
+  koreanMeaning: string;
+  correctWord: string;
+  sentence: string;
+  tapCount: number;
 }
 
 export interface GameState {

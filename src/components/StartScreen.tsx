@@ -1,7 +1,7 @@
 import React from 'react';
 import { Semester } from '../types';
 import { ChefAvatar } from './ChefAvatar';
-import { Volume2, VolumeX, Sparkles, Utensils, Award, BookOpen, AlertCircle } from 'lucide-react';
+import { Volume2, VolumeX, Sparkles, Utensils, Award, BookOpen, AlertCircle, User, FileSpreadsheet } from 'lucide-react';
 import { playOrderBellSound } from '../utils/audio';
 
 interface StartScreenProps {
@@ -10,6 +10,11 @@ interface StartScreenProps {
   onStartGame: () => void;
   soundEnabled: boolean;
   onToggleSound: () => void;
+  userName: string;
+  onUpdateUserName: (name: string) => void;
+  playCount: number;
+  onOpenSheetModal: () => void;
+  hasSheetWebhook: boolean;
 }
 
 export const StartScreen: React.FC<StartScreenProps> = ({
@@ -18,6 +23,11 @@ export const StartScreen: React.FC<StartScreenProps> = ({
   onStartGame,
   soundEnabled,
   onToggleSound,
+  userName,
+  onUpdateUserName,
+  playCount,
+  onOpenSheetModal,
+  hasSheetWebhook,
 }) => {
   const handleStart = () => {
     playOrderBellSound(soundEnabled);
@@ -33,23 +43,25 @@ export const StartScreen: React.FC<StartScreenProps> = ({
       id="start-screen"
     >
       {/* Top Header Bar */}
-      <header className="w-full max-w-4xl flex items-center justify-between z-10">
+      <header className="w-full max-w-4xl flex items-center justify-between z-10 gap-2 flex-wrap sm:flex-nowrap">
         <div className="flex items-center gap-2 bg-amber-900/10 px-3 py-1.5 rounded-full border border-amber-800/20 backdrop-blur-xs">
           <Utensils className="w-4 h-4 text-amber-800" />
           <span className="text-xs sm:text-sm font-bold tracking-tight text-amber-950">
-            중학교 1학년 필수 영단어 (CEFR A2)
+            초등학교 5학년 필수 영단어 (초5 교육과정)
           </span>
         </div>
 
-        <button
-          onClick={onToggleSound}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-100 hover:bg-amber-200 border-2 border-amber-700/30 rounded-full font-bold text-xs sm:text-sm text-amber-950 transition-all shadow-xs active:scale-95"
-          id="sound-toggle-btn"
-          aria-label={soundEnabled ? '효과음 끄기' : '효과음 켜기'}
-        >
-          {soundEnabled ? <Volume2 className="w-4 h-4 text-amber-800" /> : <VolumeX className="w-4 h-4 text-stone-500" />}
-          <span>{soundEnabled ? '소리 ON' : '소리 OFF'}</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onToggleSound}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-100 hover:bg-amber-200 border-2 border-amber-700/30 rounded-full font-bold text-xs sm:text-sm text-amber-950 transition-all shadow-xs active:scale-95"
+            id="sound-toggle-btn"
+            aria-label={soundEnabled ? '효과음 끄기' : '효과음 켜기'}
+          >
+            {soundEnabled ? <Volume2 className="w-4 h-4 text-amber-800" /> : <VolumeX className="w-4 h-4 text-stone-500" />}
+            <span>{soundEnabled ? '소리 ON' : '소리 OFF'}</span>
+          </button>
+        </div>
       </header>
 
       {/* Main Center Content: Portrait on Smartphones, Landscape on Tablets & Laptops */}
@@ -102,8 +114,51 @@ export const StartScreen: React.FC<StartScreenProps> = ({
           </div>
         </div>
 
-        {/* Right Column in Landscape / Bottom in Portrait: Semester Selector, Rules, & Start Button */}
+        {/* Right Column in Landscape / Bottom in Portrait: Student Profile, Semester Selector, Rules, & Start Button */}
         <div className="w-full lg:col-span-7 flex flex-col gap-3">
+          {/* Student Profile & Play Count Card */}
+          <div className="bg-white/90 backdrop-blur-md rounded-2xl p-3.5 border-2 border-amber-400 shadow-md">
+            <div className="flex items-center justify-between mb-2">
+              <label
+                htmlFor="student-name-input"
+                className="flex items-center gap-1.5 text-xs sm:text-sm font-black text-amber-950"
+              >
+                <User className="w-4 h-4 text-amber-700" />
+                <span>학생 이름</span>
+              </label>
+
+              <div className="flex items-center gap-1.5">
+                <span className="text-[11px] font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-300">
+                  누적 플레이: <strong className="text-amber-950 font-black">{playCount}회</strong>
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <input
+                  id="student-name-input"
+                  type="text"
+                  maxLength={15}
+                  value={userName}
+                  onChange={(e) => onUpdateUserName(e.target.value)}
+                  placeholder="이름을 입력하세요 (예: 영희, JSG)"
+                  className="w-full bg-amber-50/90 border-2 border-amber-300 focus:border-amber-600 focus:bg-white rounded-xl px-3 py-2 text-stone-900 font-bold text-sm sm:text-base outline-none transition-all placeholder-stone-400"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => onUpdateUserName(userName.trim() || '익명 학생')}
+                className="px-3 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs sm:text-sm rounded-xl transition-colors shrink-0 shadow-xs active:scale-95 cursor-pointer"
+              >
+                확인
+              </button>
+            </div>
+            <p className="text-[11px] text-amber-900/70 mt-1 pl-1">
+              * 게임 종료 시 <strong>{userName || '익명 학생'}</strong> 님의 학습 기록이 자동 저장됩니다.
+            </p>
+          </div>
+
           {/* Semester Set Selector */}
           <div className="bg-white/80 backdrop-blur-md rounded-xl p-3 border-2 border-amber-300 shadow-sm">
             <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900 mb-2">
@@ -194,7 +249,7 @@ export const StartScreen: React.FC<StartScreenProps> = ({
         <span>📱 스마트폰 세로 모드 · 💻 태블릿/노트북 가로 모드 자동 최적화</span>
         <div className="flex items-center gap-1 font-semibold text-amber-900">
           <Award className="w-3.5 h-3.5 text-amber-700" />
-          <span>중1 영어과 교육과정 성취기준 연계</span>
+          <span>초등학교 5학년 영어과 교육과정 성취기준 연계</span>
         </div>
       </footer>
     </div>
